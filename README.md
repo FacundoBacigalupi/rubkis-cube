@@ -12,8 +12,7 @@ Windows only.
 - 3×3×3 cube with 27 individual cubies
 - Instant shuffle followed by a live timer
 - Solve button replays the inverse of the shuffle history with animation
-- Manual solve detection: timer stops automatically when the cube is solved by hand
-- Camera orbit via middle-mouse drag
+- Camera orbit via middle-mouse drag and camera flip
 
 ## Controls
 
