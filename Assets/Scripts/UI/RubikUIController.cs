@@ -7,6 +7,7 @@ public class RubikUIController : MonoBehaviour
 
     [SerializeField] private Button shuffleButton;
     [SerializeField] private Button solveButton;
+    [SerializeField] private Button neuralSolveButton;
     [SerializeField] private Text   statusText;
 
     private float timerSeconds;
@@ -18,6 +19,8 @@ public class RubikUIController : MonoBehaviour
     {
         shuffleButton.onClick.AddListener(OnShuffle);
         solveButton.onClick.AddListener(OnSolve);
+        if (neuralSolveButton != null)
+            neuralSolveButton.onClick.AddListener(OnNeuralSolve);
     }
 
     void Update()
@@ -40,6 +43,15 @@ public class RubikUIController : MonoBehaviour
         StopTimer();
         SetStatus("");
         ReverseHistorySolver.Instance.Solve();
+    }
+
+    void OnNeuralSolve()
+    {
+        if (RubiksCubeController.Instance.IsAnimating) return;
+        if (NeuralSolver.IsRunning) return;
+        StopTimer();
+        SetStatus("");
+        NeuralSolver.Instance.Solve();
     }
 
     // Called by RubiksCubeController when the player manually solves the cube.

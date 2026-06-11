@@ -15,32 +15,29 @@ public class RubikShuffler : MonoBehaviour
     public void Shuffle()
     {
         var cube = RubiksCubeController.Instance;
-        cube.ResetToSolved();   // always start from solved — guarantees Solve returns to solved
+        cube.ResetToSolved();
 
-        RubikMove? lastMove = null;
+        RubikAxis? lastAxis = null;
+
+        // Build axis list once; each step we pick only from the two axes != lastAxis
+        var allAxes = new[] { RubikAxis.X, RubikAxis.Y, RubikAxis.Z };
 
         for (int i = 0; i < shuffleCount; i++)
         {
-            RubikMove move;
-            int tries = 0;
-            do
-            {
-                var axis  = Axes[Random.Range(0, Axes.Length)];
-                int layer = OuterLayers[Random.Range(0, OuterLayers.Length)];
-                int dir   = Directions[Random.Range(0, Directions.Length)];
-                move = new RubikMove(axis, layer, dir);
-                tries++;
-            }
-            // Reject move that would immediately undo the previous one (same axis+layer, opposite dir)
-            while (tries < 20 && lastMove.HasValue && Cancels(move, lastMove.Value));
+            // Only allow axes perpendicular to the previous move
+            RubikAxis[] candidates = lastAxis.HasValue
+                ? System.Array.FindAll(allAxes, a => a != lastAxis.Value)
+                : allAxes;
+
+            var axis  = candidates[Random.Range(0, candidates.Length)];
+            int layer = OuterLayers[Random.Range(0, OuterLayers.Length)];
+            int dir   = Directions[Random.Range(0, Directions.Length)];
+            var move  = new RubikMove(axis, layer, dir);
 
             cube.ApplyMoveInstant(move, addToHistory: true);
-            lastMove = move;
+            lastAxis = axis;
         }
 
         RubikUIController.Instance?.StartTimer();
     }
-
-    private static bool Cancels(RubikMove a, RubikMove b)
-        => a.Axis == b.Axis && a.Layer == b.Layer && a.Direction != b.Direction;
 }

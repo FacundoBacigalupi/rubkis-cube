@@ -3,7 +3,7 @@ using UnityEngine;
 public class RubikInputController : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private float dragThreshold = 50f;
+    [SerializeField] private float dragThreshold = 10f;
 
     private Vector2 dragStartMouse;
     private Vector3Int clickedCoord;
@@ -12,18 +12,15 @@ public class RubikInputController : MonoBehaviour
 
     void Update()
     {
-        if (RubiksCubeController.Instance.IsAnimating) return;
+        if (RubiksCubeController.Instance == null || RubiksCubeController.Instance.IsAnimating) return;
 
         if (Input.GetMouseButtonDown(0))
         {
             TryBeginDrag();
         }
-        else if (Input.GetMouseButton(0) && waitingForDrag)
+        else if (Input.GetMouseButtonUp(0) && waitingForDrag)
         {
             TryExecuteMove();
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
             waitingForDrag = false;
         }
     }
@@ -34,7 +31,7 @@ public class RubikInputController : MonoBehaviour
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
             StickerFace sticker = hit.collider.GetComponentInParent<StickerFace>();
-            if (sticker != null)
+            if (sticker != null && Vector3.Dot(sticker.transform.forward, hit.point - mainCamera.transform.position) < 0)
             {
                 dragStartMouse = Input.mousePosition;
                 clickedCoord = sticker.Cubie.Coord;

@@ -45,6 +45,8 @@ public class RubiksCubeController : MonoBehaviour
             foreach (var sf in go.GetComponentsInChildren<StickerFace>(true))
             {
                 sf.Cubie = cubie;
+                if (!sf.TryGetComponent<RoundedStickerMesh>(out _))
+                    sf.gameObject.AddComponent<RoundedStickerMesh>();
                 sf.gameObject.SetActive(IsOutwardFace(coord, sf.LocalNormal));
             }
 

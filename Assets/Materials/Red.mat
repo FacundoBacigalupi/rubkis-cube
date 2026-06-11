@@ -44,16 +44,18 @@ Material:
     - _Cutoff: 0.5
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _Metallic: 0
     - _QueueOffset: 0
     - _SampleGI: 0
+    - _Smoothness: 0.65
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 1, g: 0, b: 0, a: 1}
-    - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _BaseColor: {r: 0.769, g: 0.118, b: 0.227, a: 1}
+    - _Color: {r: 0.76899993, g: 0.11799998, b: 0.22699997, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &8926379645177651696
